@@ -1,8 +1,101 @@
+import Link from 'next/link';
 import { playfair } from './layout';
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-white text-gray-900">
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-50 border-b border-[#b89b82] bg-[#e8dccf]/95 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          {/* Left Nav */}
+          <nav className="flex items-center gap-8 text-xs tracking-[0.25em] text-[#5a3e2b]">
+            <Link href="/about" className="hover:text-[#3f2a1c]">
+              ABOUT US
+            </Link>
+            <Link href="/energy" className="hover:text-[#3f2a1c]">
+              CRYSTAL ENERGY
+            </Link>
+            <Link href="/colour" className="hover:text-[#3f2a1c]">
+              CRYSTAL COLOUR
+            </Link>
+          </nav>
+
+          {/* Right Icons */}
+          <div className="flex items-center gap-5">
+            <Link
+              href="/search"
+              aria-label="Search"
+              className="rounded-full p-2 text-[#5a3e2b] hover:bg-[#d8c6b4] hover:text-[#3f2a1c]"
+            >
+              {/* Search icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="h-5 w-5"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20 20l-3.5-3.5" />
+              </svg>
+            </Link>
+            <Link
+              href="/login"
+              aria-label="Login"
+              className="rounded-full p-2 text-[#5a3e2b] hover:bg-[#d8c6b4] hover:text-[#3f2a1c]"
+            >
+              {/* User icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 7.5a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 20.25a7.5 7.5 0 0115 0"
+                />
+              </svg>
+            </Link>
+
+            <Link
+              href="/cart"
+              aria-label="Cart"
+              className="rounded-full p-2 text-[#5a3e2b] hover:bg-[#d8c6b4] hover:text-[#3f2a1c]"
+            >
+              {/* Cart icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 3h1.5l1.35 13.5a2.25 2.25 0 002.24 2.03h9.62a2.25 2.25 0 002.21-1.78l1.73-7.47a1.5 1.5 0 00-1.46-1.84H6.12"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 21a.75.75 0 100-1.5A.75.75 0 009 21zm9 0a.75.75 0 100-1.5.75.75 0 001.5 0z"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </header>
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center px-6 py-24 text-center">
         <h1 className="text-4xl md:text-6xl font-light tracking-wide">
