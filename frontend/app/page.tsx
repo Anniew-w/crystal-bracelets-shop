@@ -5,15 +5,18 @@ export default function HomePage() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-white text-gray-900">
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-0 h-1/2 w-1/2 bg-[url('/pictures/p2.png')] bg-contain bg-no-repeat opacity-40" />
         <div
-          className="absolute bottom-0 right-0 h-1/2 w-1/2 bg-[url('/pictures/p1.png')] bg-contain bg-no-repeat opacity-40"
+          className="absolute left-0 h-1/2 w-1/2 bg-[url('/pictures/green-bracelet.png')] bg-contain bg-no-repeat opacity-50"
+          style={{ top: "2.5cm" }}
+        />
+        <div
+          className="absolute bottom-0 right-0 h-1/2 w-1/2 bg-[url('/pictures/purple-bracelet.png')] bg-contain bg-no-repeat opacity-50"
           style={{ transform: "scaleX(-1)" }}
         />
       </div>
-      <div className="relative z-10">
+      <div className="relative z-10 pt-20">
         {/* Top Navigation Bar */}
-        <header className="sticky top-0 z-50 border-b border-[#b89b82] bg-[#e8dccf]/95 backdrop-blur">
+        <header className="fixed left-0 right-0 top-0 z-50 border-b border-[#b89b82] bg-[#e8dccf]/95 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
             {/* Left Nav */}
             <nav className="flex items-center gap-8 text-xs tracking-[0.25em] text-[#5a3e2b]">
@@ -119,7 +122,7 @@ export default function HomePage() {
         </section>
 
         {/* Featured Section */}
-        <section className="bg-gray-50 px-6 py-20">
+        <section className="bg-transparent px-6 py-20">
           <div className="mx-auto max-w-6xl">
             {/* Section Title */}
             <div className="mb-12">
@@ -149,7 +152,7 @@ export default function HomePage() {
                 <div key={c.top} className="group w-[260px] md:w-[280px]">
                   <div className="relative overflow-hidden bg-white shadow-sm transition group-hover:shadow-md">
                     {/* Image placeholder (swap to real images later) */}
-                    <div className="aspect-[4/5] w-full bg-gray-200 transition duration-300 group-hover:scale-[1.03] group-hover:brightness-95" />
+                  <div className="aspect-[4/5] w-full bg-transparent transition duration-300 group-hover:scale-[1.03] group-hover:brightness-95" />
 
                     {/* Top label on image */}
                     <div className="pointer-events-none absolute left-0 right-0 top-0 p-6">
