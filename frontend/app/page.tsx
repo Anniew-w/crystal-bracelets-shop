@@ -290,7 +290,7 @@ export default function HomePage() {
                       className="grid-card-image aspect-[4/5] w-full object-contain transition duration-300 group-hover:brightness-95"
                       style={
                         {
-                          objectPosition: c.position ?? "50% 50%",
+                          objectPosition: "50% 50%",
                           "--img-x": c.offsetX ?? "0px",
                           "--img-y": c.offsetY ?? "0px",
                           "--img-scale": c.zoom ?? 1.08,
