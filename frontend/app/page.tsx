@@ -1,76 +1,39 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { playfair } from "./fonts";
 
 export default function HomePage() {
   const [headerTone, setHeaderTone] = useState<"light" | "dark">("dark");
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const [scrollMax, setScrollMax] = useState(0);
-  const [scrollValue, setScrollValue] = useState(0);
-  const scrollItems = [
-    {
-      id: "clear",
-      name: "CLEAR QUARTZ",
-      href: "/products/clear-quartz",
-      image: "/pictures/hand-pink_1.PNG",
-      offsetX: "35px",
-      offsetY: "50px",
-      zoom: 1.6,
-      zoomHover: 1.7,
-    },
-    {
-      id: "amethyst",
-      name: "Amethyst Harmony",
-      href: "/products/amethyst-harmony",
-      image: "/pictures/hand-pink_4.png",
-      offsetX: "0px",
-      offsetY: "-20px",
-      zoom: 1.5,
-      zoomHover: 1.6,
-    },
-    {
-      id: "moonstone",
-      name: "Moonstone Aura",
-      href: "/products/moonstone-aura",
-      image: "/pictures/hand-purple_3.PNG",
-      offsetX: "-40px",
-      offsetY: "65px",
-      zoom: 2.5,
-      zoomHover: 2.6,
-    },
-    {
-      id: "quartz",
-      name: "Clear Quartz",
-      href: "/products/clear-quartz",
-      image: "/pictures/hand-white_1.png",
-      offsetX: "10px",
-      offsetY: "0px",
-      zoom: 1.6,
-      zoomHover: 1.7,
-    },
-    {
-      id: "quartz-2",
-      name: "Clear Quartz",
-      href: "/products/clear-quartz",
-      image: "/pictures/hand-pink_5.png",
-      offsetX: "40px",
-      offsetY: "-20px",
-      zoom: 1.4,
-      zoomHover: 1.5,
-    },
-    {
-      id: "pink",
-      name: "Rose Quartz",
-      href: "/products/green-phantom",
-      image: "/pictures/hand-pink_2.PNG",
-      offsetX: "-40px",
-      offsetY: "-20px",
-      zoom: 1.8,
-      zoomHover: 1.9,
-    },
+  const catalogZoomBoost = 1.12;
+  const productCatalogBase = [
+    { name: "Amethyst Halo", image: "/pictures/show_Amethyst_Halo.jpg", href: "/products/show-amethyst-halo", position: "50% 35%", zoom: 1.1 },
+    { name: "Blush Crystal", image: "/pictures/show_Blush_Crystal.jpg", href: "/products/show-blush-crystal", position: "50% 40%", zoom: 1.2 },
+    { name: "Crystal Purity", image: "/pictures/show_Crystal_Purity.jpg", href: "/products/show-crystal-purity", position: "50% 40%", zoom: 1.1},
+    { name: "Emerald Phantom", image: "/pictures/show_Emerald_Phantom.jpg", href: "/products/show-emerald-phantom", position: "80% 42%", zoom: 1.2 },
+    { name: "Forest Whisper", image: "/pictures/show_Forest_Whisper.jpg", href: "/products/show-forest-whisper", position: "30% 0%", zoom: 1.6 },
+    { name: "Golden Tiger", image: "/pictures/show_Golden_Tiger.jpg", href: "/products/show-golden-tiger", position: "50% 50%", zoom: 1.0 },
+    { name: "Lunar Rose", image: "/pictures/show_Lunar_Rose.jpg", href: "/products/show-lunar-rose", position: "95% 35%", zoom: 1.1 },
+    { name: "Rosie Moom", image: "/pictures/show_Rosie_Moom.jpg", href: "/products/show-rosie-moom", position: "50% 30%", zoom: 1.4 },
+    { name: "Rosy Serenity", image: "/pictures/show_Rosy_Serenity.jpg", href: "/products/show-rosy-serenity", position: "10% 50%", zoom: 1.3 },
+    { name: "Violet Whisperr", image: "/pictures/show_Violet_Whisperr.jpg", href: "/products/show-violet-whisperr", position: "50% 30%", zoom: 1.2 },
   ];
+  const productCatalog = useMemo(
+    () =>
+      productCatalogBase.map((product, index) => {
+        const originalPrice = 69 + (index % 7) * 8 + Math.floor(index / 7) * 6;
+        const discountPercent = [20, 25, 30, 35][index % 4];
+        const salePrice = Number((originalPrice * (1 - discountPercent / 100)).toFixed(2));
+        return {
+          ...product,
+          originalPrice,
+          salePrice,
+          discountPercent,
+        };
+      }),
+    []
+  );
 
   useEffect(() => {
     const sections = Array.from(
@@ -86,7 +49,7 @@ export default function HomePage() {
           if (!entry.isIntersecting) return;
           const tone = entry.target.getAttribute("data-header-tone");
           if (tone === "dark" || tone === "light") {
-            setHeaderTone(tone);
+            setHeaderTone((prev) => (prev === tone ? prev : tone));
           }
         });
       },
@@ -98,29 +61,6 @@ export default function HomePage() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const updateMax = () => {
-      const max = el.scrollWidth - el.clientWidth;
-      setScrollMax(Math.max(0, max));
-    };
-
-    const handleScroll = () => {
-      setScrollValue(el.scrollLeft);
-    };
-
-    updateMax();
-    handleScroll();
-    el.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", updateMax);
-    return () => {
-      el.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", updateMax);
-    };
   }, []);
 
   return (
@@ -135,7 +75,7 @@ export default function HomePage() {
           style={{ bottom: "-8cm", right: "1cm", transform: "scale(1.45)" }}
         />
       </div>
-      <div className="relative z-10 pt-20">
+      <div className="relative z-10 pt-30">
         {/* Top Navigation Bar */}
         <header
           className={`fixed left-0 right-0 top-0 z-50 border-b backdrop-blur ${
@@ -144,7 +84,7 @@ export default function HomePage() {
               : "border-[#b89b82] bg-white/85 text-[#3f2a1c]"
           }`}
         >
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex w-full items-center justify-between px-8 py-4 md:px-12">
             {/* Left Nav */}
             <nav className="flex items-center gap-8 text-xs tracking-[0.25em]">
               <Link
@@ -263,111 +203,36 @@ export default function HomePage() {
         </header>
         {/* Hero Section */}
         <section
-          className="flex flex-col items-center justify-center px-6 py-24 text-center"
+          className="flex flex-col items-center justify-center px-6 py-14 text-center"
           data-header-tone="dark"
         >
           <h1 className={`${playfair.className} text-4xl md:text-8xl font-bold tracking-[0.2em] text-white`}>
-            Crystal Bracelets
+             LumiCrystal
           </h1>
           <div className="mt-6 max-w-xxl">
             <div className="rounded-2xl bg-gradient-to-r from-black/60 via-black/35 to-transparent px-6 py-4 text-lg text-white shadow-sm backdrop-blur">
               <p className="leading-relaxed">
-                <span className="font-semibold">Proudly HANDMADE in Melbourne.</span>
+                <span className="font-semibold">Handmade in Melbourne</span>
                 <br />
-                Every gemstone is chosen with care for its quality, colour, texture, and energy.
+                Every gemstone is carefully selected for its colour, clarity, and natural energy.
                 <br />
-                No two stones are the same — each bracelet carries its 
-                <span className="font-semibold"> OWN STORY</span>.
+                No two stones are ever the same — each bracelet carries its own quiet story.
+                <br />
+                <span className="font-semibold text-2xl"> Wear Your Light !</span>
               </p>
             </div>
           </div>
         </section>
 
-        {/* Scroll Gallery */}
-        <section className="px-6 pb-10">
-          <div ref={scrollRef} className="scroll-gallery mt-8 pb-4">
-            <div className="scroll-track">
-              {[scrollItems, scrollItems].map((group, groupIndex) => (
-                <div className="scroll-track-inner" key={groupIndex}>
-                  {group.map((item) => (
-                    <Link
-                      key={`${item.id}-${groupIndex}`}
-                      href={item.href}
-                      className="scroll-card group"
-                      aria-label={item.name}
-                    >
-                      <div className="scroll-card-media">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          style={
-                            {
-                              objectFit: "contain",
-                              objectPosition: item.position ?? "50% 50%",
-                              "--img-x": item.offsetX ?? "0px",
-                              "--img-y": item.offsetY ?? "0px",
-                              "--img-scale": item.zoom ?? 1.08,
-                              "--img-scale-hover": item.zoomHover ?? 1.15,
-                            } as React.CSSProperties
-                          }
-                        />
-                      </div>
-                      <p className="scroll-card-title">{item.name}</p>
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="mx-auto mt-4 max-w-6xl px-2">
-            <input
-              aria-label="Scroll gallery"
-              type="range"
-              min={0}
-              max={scrollMax}
-              value={scrollValue}
-              onChange={(event) => {
-                const value = Number(event.target.value);
-                setScrollValue(value);
-                if (scrollRef.current) {
-                  scrollRef.current.scrollLeft = value;
-                }
-              }}
-              className="scroll-slider"
-            />
-          </div>
-        </section>
-
         {/* Featured Section */}
-        <section className="bg-transparent px-6 pt-20 pb-25">
+        <section className="bg-transparent px-6 pt-8 pb-25">
+          <div aria-hidden className="h-8" />
+          <div data-header-tone="light" className="h-px" />
           <div className="mx-auto max-w-xxl">
-            {/* Section Title */}
-            <div className="mb-12">
-              <div data-header-tone="light" className="h-1" />
-              <div className="flex items-center gap-6">
-                <div className="hidden h-px flex-1 bg-gray-300 md:block" />
-                <div className="text-center">
-                  <h2 className={`${playfair.className} mb-6 text-5xl font-bold tracking-[0.3em] text-white`}>
-                    NATURAL CRYSTAL ENERGY
-                  </h2>
-                </div>
-                <div className="hidden h-px flex-1 bg-gray-300 md:block" />
-              </div>
-            </div>
 
             {/* Category Grid */}
             <div className="mb-20 grid grid-cols-4 gap-8 justify-items-center">
               {[
-                {
-                  bottom: "FORTUNE & JOB",
-                  top: "Citrine X Tiger's eye",
-                  href: "/energy/fortune-job",
-                  image: "/pictures/yellow.jpg",
-                  offsetX: "0px",
-                  offsetY: "5px",
-                  zoom: 1.1,
-                  zoomHover: 1.2,
-                },
                 {
                   bottom: "POPULARITY & ROMANCE",
                   top: "Rose Quartz X Moonstone",
@@ -382,7 +247,7 @@ export default function HomePage() {
                   bottom: "WISDOM & SPIRITUALITY",
                   top: "Amethyst",
                   href: "/energy/wisdom-spirituality",
-                  image: "/pictures/purple4.jpg",
+                  image: "/pictures/show_violet_whisper.jpg",
                   offsetX: "0px",
                   offsetY: "40px",
                   zoom: 1.3,
@@ -398,6 +263,16 @@ export default function HomePage() {
                   zoom: 1.3,
                   zoomHover: 1.4,
                 },
+                {
+                  bottom: "FORTUNE & JOB",
+                  top: "Citrine X Tiger's eye",
+                  href: "/energy/fortune-job",
+                  image: "/pictures/yellow.jpg",
+                  offsetX: "0px",
+                  offsetY: "5px",
+                  zoom: 1.1,
+                  zoomHover: 1.2,
+                },
               ].map((c) => (
                 <Link
                   key={c.top}
@@ -408,6 +283,10 @@ export default function HomePage() {
                     <img
                       src={c.image}
                       alt={c.top}
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={1000}
                       className="grid-card-image aspect-[4/5] w-full object-contain transition duration-300 group-hover:brightness-95"
                       style={
                         {
@@ -416,7 +295,7 @@ export default function HomePage() {
                           "--img-y": c.offsetY ?? "0px",
                           "--img-scale": c.zoom ?? 1.08,
                           "--img-scale-hover": c.zoomHover ?? 1.15,
-                        } as React.CSSProperties
+                        } as CSSProperties
                       }
                     />
 
@@ -439,8 +318,13 @@ export default function HomePage() {
             <div className="relative left-1/2 right-1/2 mt-16 mb-20 w-screen -translate-x-1/2 overflow-hidden">
               <Link href="/your-link" className="block">
                 <img
-                  src="/pictures/green-phantom-7A-2.jpg"
+                  src="/pictures/green-6.jpg"
                   alt="Showcase"
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                  width={1920}
+                  height={1080}
                   className="h-[520px] w-full object-cover shadow-sm md:h-[620px] 
                             transition-transform duration-500 ease-out 
                             hover:scale-105"
@@ -449,59 +333,67 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-14 flex flex-wrap justify-center gap-10">
-              {[
-                {
-                  label: "SOFT PASTEL COLOURS",
-                  href: "/collections/best-seller",
-                  image: "/pictures/white3.jpg",
-                  offsetX: "-40px",
-                  offsetY: "110px",
-                  zoom: 3.0,
-                  zoomHover: 3.1,
-                },
-                {
-                  label: "VIVID COLOURS",
-                  href: "/collections/signature-piece",
-                  image: "/pictures/purple3.jpg",
-                  offsetX: "30px",
-                  offsetY: "140px",
-                  zoom: 2.7,
-                  zoomHover: 2.8,
-                },
-              ].map((c) => (
-                <Link
-                  key={c.label}
-                  href={c.href}
-                  className="group w-[650px] max-w-full transition-transform duration-300 hover:scale-[1.03]"
-                >
-                  <div className="relative overflow-hidden rounded-xl bg-white/70 shadow-sm transition group-hover:shadow-md">
-                    <img
-                      src={c.image}
-                      alt={c.label}
-                      className="grid-card-image h-100 w-full object-contain transition duration-300 group-hover:brightness-95"
-                      style={
-                        {
-                          objectPosition: c.position ?? "50% 50%",
-                          "--img-x": c.offsetX ?? "0px",
-                          "--img-y": c.offsetY ?? "0px",
-                          "--img-scale": c.zoom ?? 1.08,
-                          "--img-scale-hover": c.zoomHover ?? 1.15,
-                        } as React.CSSProperties
-                      }
-                    />
-                  </div>
-                  <p className={`${playfair.className} mt-3 text-center text-xl font-bold tracking-[0.25em] text-gray-900`}>
-                    {c.label}
-                  </p>
-                </Link>
-              ))}
-            </div>
+            {/* Product Catalog */}
+            <section className="px-6 pb-16" data-header-tone="light">
+              <div className="mx-auto max-w-7xl">
+                <h2 className={`${playfair.className} mb-8 text-center text-3xl font-bold tracking-[0.18em] text-white md:text-4xl`}>
+                  PRODUCTS
+                </h2>
+                <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+                  {productCatalog.map((product, index) => (
+                    <Link
+                      key={product.href}
+                      href={product.href}
+                      className="group block overflow-hidden rounded-xl bg-gray-100 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <div className="h-80 w-full overflow-hidden bg-gray-200">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          loading={index < 8 ? "eager" : "lazy"}
+                          fetchPriority={index < 4 ? "high" : "auto"}
+                          decoding="async"
+                          width={800}
+                          height={800}
+                          className="block h-80 w-full object-cover transition duration-300"
+                          style={{
+                            objectPosition: product.position,
+                            transform: `translate(${product.nudgeX ?? 0}px, ${product.nudgeY ?? 0}px) scale(${product.zoom * catalogZoomBoost})`,
+                            transformOrigin: "center",
+                          }}
+                        />
+                      </div>
+                      <div className="relative z-10 bg-gray-100 px-4 py-4">
+                        <p className={`${playfair.className} text-left text-lg font-semibold tracking-[0.03em] text-gray-900`}>
+                          {product.name}
+                        </p>
+                        <div className={`${playfair.className} mt-1 flex items-end gap-2`}>
+                          <span className="text-2xl font-extrabold text-gray-900">
+                            A${product.salePrice.toFixed(2)}
+                          </span>
+                          <span className="text-sm text-gray-400 line-through">
+                            A${product.originalPrice.toFixed(2)}
+                          </span>
+                          <span className="ml-auto text-lg font-extrabold tracking-wide text-red-600">
+                            {product.discountPercent}% OFF
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
 
             <div className="relative left-1/2 right-1/2 mt-30 w-screen -translate-x-1/2">
               <img
                 src="/pictures/show1.jpg"
                 alt="Showcase"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                width={1920}
+                height={1080}
                 className="h-[420px] w-full object-cover shadow-sm md:h-[520px]"
                 style={{ objectPosition: "50% 45%" }}
               />
