@@ -358,7 +358,7 @@ export default function HomePage() {
                           className="block h-80 w-full object-cover transition duration-300"
                           style={{
                             objectPosition: product.position,
-                            transform: `translate(${product.nudgeX ?? 0}px, ${product.nudgeY ?? 0}px) scale(${product.zoom * catalogZoomBoost})`,
+                            transform: "translate(0px, 0px) scale(1)",
                             transformOrigin: "center",
                           }}
                         />
